@@ -1,72 +1,20 @@
-import requests
-import pandas as pd
-import duckdb
+# Install dependencies as needed:
+# pip install kagglehub[pandas-datasets]
+import kagglehub
+from kagglehub import KaggleDatasetAdapter
 
-# ===============================
-# Baixa os dados da API
-# ===============================
+# Set the path to the file you'd like to load
+file_path = ""
 
-posts = requests.get(
-    "https://jsonplaceholder.typicode.com/posts"
-).json()
+# Load the latest version
+df = kagglehub.load_dataset(
+  KaggleDatasetAdapter.PANDAS,
+  "arkhiplisitsa/instagram-top-accounts",
+  file_path,
+  # Provide any additional arguments like 
+  # sql_query or pandas_kwargs. See the 
+  # documenation for more information:
+  # https://github.com/Kaggle/kagglehub/blob/main/README.md#kaggledatasetadapterpandas
+)
 
-usuarios = requests.get(
-    "https://jsonplaceholder.typicode.com/users"
-).json()
-
-comentarios = requests.get(
-    "https://jsonplaceholder.typicode.com/comments"
-).json()
-
-# ===============================
-# Converte para DataFrame
-# ===============================
-
-df_posts = pd.DataFrame(posts)
-df_usuarios = pd.DataFrame(usuarios)
-df_comentarios = pd.DataFrame(comentarios)
-
-# ===============================
-# Conecta ao DuckDB
-# ===============================
-
-con = duckdb.connect("jsonplaceholder.duckdb")
-
-# ===============================
-# Salva as tabelas
-# ===============================
-
-con.execute("""
-CREATE OR REPLACE TABLE posts AS
-SELECT * FROM df_posts
-""")
-
-con.execute("""
-CREATE OR REPLACE TABLE usuarios AS
-SELECT * FROM df_usuarios
-""")
-
-con.execute("""
-CREATE OR REPLACE TABLE comentarios AS
-SELECT * FROM df_comentarios
-""")
-
-# ===============================
-# Consulta SQL
-# ===============================
-
-resultado = con.execute("""
-SELECT
-    p.id,
-    p.title,
-    u.name,
-    u.email
-FROM posts p
-LEFT JOIN usuarios u
-ON p.userId = u.id
-LIMIT 20
-""").fetchdf()
-
-print(resultado)
-
-con.close()
+print("First 5 records:", df.head())
