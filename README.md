@@ -154,22 +154,6 @@ O dashboard apresenta indicadores como:
 
 ---
 
-## Objetivo
-
-Este projeto foi desenvolvido para demonstrar conhecimentos em:
-
-- Engenharia de Dados
-- ETL
-- Python
-- Pandas
-- Arquitetura Bronze / Silver
-- Manipulação de arquivos Parquet
-- Visualização de dados
-- Dashboards
-- Cybersecurity Analytics
-
----
-
 ## Licença
 
 Este projeto utiliza dados públicos disponibilizados pela **Cybersecurity and Infrastructure Security Agency (CISA)**.
